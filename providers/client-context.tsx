@@ -15,7 +15,13 @@ export const ClientContext = createContext<{
 export function ClientProvider({ children }: { children: ReactNode }) {
   const [clients, setClients] = useLocalStorage<Client[]>(CLIENTS_KEY, [])
 
-  const value = useMemo(() => ({ clients, setClients }), [clients, setClients])
+  const value = useMemo(
+    () => ({
+      clients,
+      setClients,
+    }),
+    [clients, setClients]
+  )
 
   return (
     <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

@@ -1,19 +1,21 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ClientContext } from '@/providers/client-context'
 
 import { Client } from '@/lib/dummy-data'
 import { formatDateToLocal } from '@/lib/utils'
+import { useClientFilter } from '@/hooks/use-client-filter'
 import ClientStatus from '@/components/ui/client/status'
 
 export function ClientTable() {
   const router = useRouter()
+
   const { clients, setClients } = useContext(ClientContext)
-  if (!clients?.length) {
-    return <p className="text-center">No clients found, Try creating one!</p>
-  }
+  const { filteredClients } = useClientFilter({
+    clients,
+  })
 
   const toggleStatus = (id: string) => {
     const updatedClients = clients.map((client) => {
@@ -29,12 +31,22 @@ export function ClientTable() {
     setClients(updatedClients)
   }
 
+  if (!clients?.length) {
+    return <p className="text-center">No clients found, Try creating one!</p>
+  }
+
+  if (!filteredClients.length) {
+    return (
+      <p className="text-center">No clients found, Try changing your filter!</p>
+    )
+  }
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {clients?.map((client) => (
+            {filteredClients?.map((client) => (
               <div
                 key={client.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
@@ -107,7 +119,7 @@ export function ClientTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {clients?.map((client) => (
+              {filteredClients?.map((client) => (
                 <tr
                   key={client.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
