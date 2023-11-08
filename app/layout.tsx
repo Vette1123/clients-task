@@ -1,7 +1,7 @@
 import '@/styles/globals.css'
 
 import type { Metadata } from 'next'
-import { ThemeProvider } from '@/providers/theme-provider'
+import { Toaster } from 'sonner'
 
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/lib/fonts'
@@ -37,13 +37,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
+          <div className="relative flex min-h-screen flex-col">
+            <SiteHeader />
+            <div className="flex-1">{children}</div>
+          </div>
+          <Toaster />
+          <TailwindIndicator />
         </body>
       </html>
     </>
