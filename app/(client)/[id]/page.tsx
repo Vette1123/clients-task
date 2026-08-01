@@ -14,14 +14,16 @@ export interface ClientDetailsProps {
 }
 
 interface Props {
-  params: { id: string }
-  searchParams: ClientDetailsProps
+  params: Promise<{ id: string }>
+  searchParams: Promise<ClientDetailsProps>
 }
 
-const ClientDetails = ({ searchParams }: Props) => {
+const ClientDetails = async ({ searchParams }: Props) => {
+  const clientDetails = await searchParams
+
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <ClientCard clientDetails={searchParams} />
+      <ClientCard clientDetails={clientDetails} />
     </section>
   )
 }
